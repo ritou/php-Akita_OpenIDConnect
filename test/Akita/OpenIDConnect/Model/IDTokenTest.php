@@ -11,8 +11,8 @@ class Akita_OpenIDConnect_Model_IDToken_Test
         $payload = array(   "iss" => "iss_url",
                             "user_id" => "user_id",
                             "aud" => "client_id",
-                            "exp" => mktime(0, 0, 0, 8, 1, 2012),
-                            "iat" => mktime(0, 0, 0, 7, 31, 2012)
+                            "exp" => gmmktime(0, 0, 0, 8, 1, 2012),
+                            "iat" => gmmktime(0, 0, 0, 7, 31, 2012)
                     );
         $dummy_key = "dummy key";
         // construct, setHeader, setPayload
@@ -20,19 +20,19 @@ class Akita_OpenIDConnect_Model_IDToken_Test
 
         // getTokenString - Success
         $token_string = $idToken->getTokenString();
-        $this->assertEquals('eyJhbGciOiJub25lIiwidHlwIjoiSldTIn0.eyJpc3MiOiJpc3NfdXJsIiwidXNlcl9pZCI6InVzZXJfaWQiLCJhdWQiOiJjbGllbnRfaWQiLCJleHAiOjEzNDM3NDY4MDAsImlhdCI6MTM0MzY2MDQwMH0.', $token_string);
+        $this->assertEquals('eyJhbGciOiJub25lIiwidHlwIjoiSldTIn0.eyJpc3MiOiJpc3NfdXJsIiwidXNlcl9pZCI6InVzZXJfaWQiLCJhdWQiOiJjbGllbnRfaWQiLCJleHAiOjEzNDM3NzkyMDAsImlhdCI6MTM0MzY5MjgwMH0.', $token_string);
 
         // setPayloadItem
         $idToken->setPayloadItem('ops','ops_string');
         $token_string = $idToken->getTokenString();
-        $this->assertEquals('eyJhbGciOiJub25lIiwidHlwIjoiSldTIn0.eyJpc3MiOiJpc3NfdXJsIiwidXNlcl9pZCI6InVzZXJfaWQiLCJhdWQiOiJjbGllbnRfaWQiLCJleHAiOjEzNDM3NDY4MDAsImlhdCI6MTM0MzY2MDQwMCwib3BzIjoib3BzX3N0cmluZyJ9.', $token_string);
+        $this->assertEquals('eyJhbGciOiJub25lIiwidHlwIjoiSldTIn0.eyJpc3MiOiJpc3NfdXJsIiwidXNlcl9pZCI6InVzZXJfaWQiLCJhdWQiOiJjbGllbnRfaWQiLCJleHAiOjEzNDM3NzkyMDAsImlhdCI6MTM0MzY5MjgwMCwib3BzIjoib3BzX3N0cmluZyJ9.', $token_string);
 
         // setHeaderItem
         $idToken->setHeaderItem('alg','HS256');
         $shared_key = 'This is shared key';
         $idToken->setKey($shared_key);
         $token_string = $idToken->getTokenString();
-        $this->assertEquals('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJpc3NfdXJsIiwidXNlcl9pZCI6InVzZXJfaWQiLCJhdWQiOiJjbGllbnRfaWQiLCJleHAiOjEzNDM3NDY4MDAsImlhdCI6MTM0MzY2MDQwMCwib3BzIjoib3BzX3N0cmluZyJ9.larDD4dLtd65w5Ml8rjCO17wQ0AgQ7K6LgsQjf4ampw', $token_string);
+        $this->assertEquals('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJpc3NfdXJsIiwidXNlcl9pZCI6InVzZXJfaWQiLCJhdWQiOiJjbGllbnRfaWQiLCJleHAiOjEzNDM3NzkyMDAsImlhdCI6MTM0MzY5MjgwMCwib3BzIjoib3BzX3N0cmluZyJ9.kxS6-O34X5XbvwacHcctQe5cJkasqJ5G0zU4MDqHIM0', $token_string);
 
         // setAccessTokenHash
         $idToken->setAccessTokenHash('access_token_string');
@@ -40,8 +40,8 @@ class Akita_OpenIDConnect_Model_IDToken_Test
                                 'iss' => 'iss_url',
                                 'user_id' => 'user_id',
                                 'aud' => 'client_id',
-                                'exp' => 1343746800,
-                                'iat' => 1343660400,
+                                'exp' => gmmktime(0, 0, 0, 8, 1, 2012),
+                                'iat' => gmmktime(0, 0, 0, 7, 31, 2012),
                                 'ops' => 'ops_string',
                                 'at_hash' => 'JnPXVfC--Wj6h3moc1dyiQ'
                             );
@@ -54,8 +54,8 @@ class Akita_OpenIDConnect_Model_IDToken_Test
                                 'iss' => 'iss_url',
                                 'user_id' => 'user_id',
                                 'aud' => 'client_id',
-                                'exp' => 1343746800,
-                                'iat' => 1343660400,
+                                'exp' => gmmktime(0, 0, 0, 8, 1, 2012),
+                                'iat' => gmmktime(0, 0, 0, 7, 31, 2012),
                                 'ops' => 'ops_string',
                                 'at_hash' => 'JnPXVfC--Wj6h3moc1dyiQ',
                                 'c_hash' => 'f0zfwRaKGf53ea5EmauamA'
@@ -76,13 +76,13 @@ class Akita_OpenIDConnect_Model_IDToken_Test
     public function testIDTokenValidation()
     {
         $shared_key = 'This is shared key';
-        $idTokenString = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJpc3NfdXJsIiwidXNlcl9pZCI6InVzZXJfaWQiLCJhdWQiOiJjbGllbnRfaWQiLCJleHAiOjEzNDM3NDY4MDAsImlhdCI6MTM0MzY2MDQwMCwib3BzIjoib3BzX3N0cmluZyJ9.larDD4dLtd65w5Ml8rjCO17wQ0AgQ7K6LgsQjf4ampw';
+        $idTokenString = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJpc3NfdXJsIiwidXNlcl9pZCI6InVzZXJfaWQiLCJhdWQiOiJjbGllbnRfaWQiLCJleHAiOjEzNDM3NzkyMDAsImlhdCI6MTM0MzY5MjgwMCwib3BzIjoib3BzX3N0cmluZyJ9.kxS6-O34X5XbvwacHcctQe5cJkasqJ5G0zU4MDqHIM0';
         $expected_header = array(   "alg" => "HS256", "typ" => "JWS");
         $expected_payload = array(   "iss" => "iss_url",
                             "user_id" => "user_id",
                             "aud" => "client_id",
-                            "exp" => mktime(0, 0, 0, 8, 1, 2012),
-                            "iat" => mktime(0, 0, 0, 7, 31, 2012),
+                            "exp" => gmmktime(0, 0, 0, 8, 1, 2012),
+                            "iat" => gmmktime(0, 0, 0, 7, 31, 2012),
                             "ops" => "ops_string"
                     );
         try {
